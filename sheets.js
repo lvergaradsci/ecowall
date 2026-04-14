@@ -1,58 +1,46 @@
-// ===============================
-// CONFIG API
-// ===============================
-const API_URL = "https://script.google.com/macros/s/TU_ID/exec";
+const API_URL = "TU_URL_APPS_SCRIPT";
 
 // ===============================
-// REQUEST HELPER
+// ENVIAR REVELACIÓN
 // ===============================
-async function apiRequest(params = {}) {
-  const url = API_URL + "?" + new URLSearchParams(params);
+export async function sendReveal({ noteId, noteLabel, team, difficulty }) {
+  return fetch(API_URL, {
+    method: "POST",
+    body: new URLSearchParams({
+      action: "submitReveal",
+      noteId,
+      noteLabel,
+      team,
+      difficulty
+    })
+  });
+}
 
-  const res = await fetch(url);
+// ===============================
+// OBTENER EQUIPOS
+// ===============================
+export async function getTeams() {
+  const res = await fetch(API_URL + "?action=getTeams");
   return res.json();
 }
 
 // ===============================
-// LOG REVEAL
+// PREGUNTA ALEATORIA
 // ===============================
-function logReveal(noteId, noteLabel, team, points) {
-  return apiRequest({
-    action: "submitReveal",
-    noteId,
-    noteLabel,
-    team,
-    points,
-    timestamp: new Date().toISOString()
+export async function getQuestion() {
+  const res = await fetch(API_URL + "?action=getQuestion");
+  return res.json();
+}
+
+// ===============================
+// RESULTADO FINAL
+// ===============================
+export async function sendFinal(scores) {
+  return fetch(API_URL, {
+    method: "POST",
+    body: new URLSearchParams({
+      action: "submitFinal",
+      scores: JSON.stringify(scores)
+    })
   });
 }
-
-// ===============================
-// FINAL RESULT
-// ===============================
-function submitFinal(scoreA, scoreB) {
-  return apiRequest({
-    action: "submitFinal",
-    scoreA,
-    scoreB,
-    date: new Date().toISOString()
-  });
-}
-
-// ===============================
-// RESET OCULTO
-// ===============================
-function wipeAll() {
-  localStorage.clear();
-  apiRequest({ action: "wipeData" });
-  location.reload();
-}
-
-// combinación secreta
-document.addEventListener("keydown", (e) => {
-  if (e.ctrlKey && e.shiftKey && e.key === "X") {
-    if (confirm("¿Reset total del juego?")) {
-      wipeAll();
-    }
-  }
-});
