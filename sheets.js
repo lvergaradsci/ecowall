@@ -1,7 +1,7 @@
 // =====================================================
 // CONFIGURACIÓN
 // =====================================================
-let API_URL = "";
+let API_URL = "https://script.google.com/macros/s/AKfycbwd42HxKIkfYHxiC7MKQqRyvaM_QoGqJko_6AlLmf4Iw_XqcLqD5J8uJevT1q4KKYKn3Q/exec";
 
 // cargar URL guardada (si existe)
 document.addEventListener("DOMContentLoaded", () => {
