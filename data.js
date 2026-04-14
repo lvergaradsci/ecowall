@@ -1,0 +1,436 @@
+// =============================================================
+// data.js — Knowledge Wall · Gestión Ambiental
+// Edita este array para cambiar preguntas, puntos y categorías.
+// También puedes importar desde JSON o CSV usando el panel admin.
+// =============================================================
+
+const WALL_DATA = {
+
+  // ── Equipos ──────────────────────────────────────────────
+  teams: [
+    { id: "A", name: "Equipo A", score: 0, color: "#7b1c1c" },
+    { id: "B", name: "Equipo B", score: 0, color: "#1a3a5c" },
+  ],
+
+  // ── Configuración del tablero ─────────────────────────────
+  config: {
+    title: "Transporte y Dispersión de los Contaminantes",
+    subtitle: "Tratamiento y Corrección de la Contaminación",
+    institution: "Universidad de Córdoba · Ingeniería Industrial",
+    course: "Gestión Ambiental",
+    // GOOGLE SHEETS: pega aquí tu URL de Apps Script para activar sync
+    // sheetsUrl: "https://script.google.com/macros/s/TU_ID_AQUI/exec",
+    sheetsUrl: "",
+  },
+
+  // ── Notas del tablero ─────────────────────────────────────
+  // Categorías de color:
+  //   "glosario"   → amarillo
+  //   "proceso"    → verde sage
+  //   "tratamiento"→ azul tenue
+  //   "concepto"   → naranja cálido
+  //   "articulo"   → lila
+  //   "reto"       → rojo (vale doble)
+  notes: [
+    // ── GLOSARIO (10 notas) ──────────────────────────────
+    {
+      id: 1,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nLIXIVIACIÓN",
+      answer: "Proceso por el cual el agua se filtra a través del suelo transportando nutrientes disueltos y contaminantes hacia masas de agua subterráneas o superficiales.",
+      hint: "Relacionado con lluvias intensas y suelos porosos.",
+    },
+    {
+      id: 2,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nADVECCIÓN",
+      answer: "Transporte de una sustancia en un fluido debido a su movimiento masivo. Es el mecanismo de transporte horizontal en la atmósfera.",
+      hint: "Movimiento horizontal. Piensa en el viento transportando gases.",
+    },
+    {
+      id: 3,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nTURBULENCIA ATMOSFÉRICA",
+      answer: "Movimientos irregulares del aire a pequeña escala, provocados por vientos que varían en velocidad y dirección. Ayuda a dispersar contaminantes.",
+      hint: "Los edificios y bosques la generan a escala local.",
+    },
+    {
+      id: 4,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nPLUMA",
+      answer: "Flujo disperso de contaminante que se libera desde una fuente puntual hacia la atmósfera o cuerpos de agua.",
+      hint: "Como el humo de una chimenea viéndose desde lejos.",
+    },
+    {
+      id: 5,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nCONVECCIÓN",
+      answer: "Movimiento vertical del aire generado por diferencias de temperatura. Permite el transporte vertical de contaminantes.",
+      hint: "El calor sube. Contrario a la advección que es horizontal.",
+    },
+    {
+      id: 6,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "¿Qué es la\nINVERSIÓN TÉRMICA?",
+      answer: "Condición atmosférica donde una capa de aire caliente actúa como 'tapa', impidiendo que los contaminantes se eleven. Causa acumulación de smog cerca de la superficie.",
+      hint: "Ocurre cuando la temperatura aumenta con la altura (al revés de lo normal).",
+    },
+    {
+      id: 7,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nBIORREMEDIACIÓN",
+      answer: "Técnica que utiliza microorganismos como bacterias y hongos para degradar contaminantes orgánicos, transformándolos en compuestos menos dañinos.",
+      hint: "Bio = vida. Usa seres vivos para limpiar el suelo.",
+    },
+    {
+      id: 8,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nFITORREMEDIACIÓN",
+      answer: "Técnica que emplea plantas capaces de absorber, acumular o transformar contaminantes. Útil en suelos con metales pesados o hidrocarburos.",
+      hint: "Fito = planta. Más lenta pero económica y sostenible.",
+    },
+    {
+      id: 9,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nDEPOSICIÓN",
+      answer: "Proceso que permite que las sustancias pasen de la atmósfera al suelo o al agua. Puede ser húmeda (lluvia) o seca (sedimentación de partículas).",
+      hint: "La lluvia 'limpia' el aire porque hace esto.",
+    },
+    {
+      id: 10,
+      category: "glosario",
+      points: 100,
+      label: "GLOSARIO",
+      front: "Define\nADSORCIÓN",
+      answer: "Proceso por el cual algunos contaminantes quedan retenidos en la superficie del suelo, limitando su movilidad aunque sin eliminarlos.",
+      hint: "El suelo 'atrapa' al contaminante en su superficie.",
+    },
+
+    // ── PROCESOS (8 notas) ───────────────────────────────
+    {
+      id: 11,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "¿Qué factores\nMETEOROLÓGICOS\nafectan el transporte?",
+      answer: "El viento (dirección y velocidad), la humedad y precipitación (lavado de partículas) y la radiación solar (forma contaminantes secundarios).",
+      hint: "Piensa en las condiciones del clima que cambian cada día.",
+    },
+    {
+      id: 12,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "¿Cómo afecta\nla TOPOGRAFÍA\na la contaminación?",
+      answer: "Los valles actúan como muros que impiden la dispersión lateral, atrapando el smog. Los edificios y bosques generan turbulencia que dispersa contaminantes localmente.",
+      hint: "¿Por qué ciudades como Medellín tienen más smog en ciertos días?",
+    },
+    {
+      id: 13,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "Diferencia entre\nTRANSPORTE\ny DISPERSIÓN",
+      answer: "El transporte es el movimiento físico del contaminante desde su fuente. La dispersión es el proceso de dilución, mezcla y distribución en el medio.",
+      hint: "Uno se mueve, el otro se expande.",
+    },
+    {
+      id: 14,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "¿Cómo se\ntransportan\ncontaminantes en RÍOS?",
+      answer: "A través del movimiento del agua que arrastra contaminantes a grandes distancias. La dispersión ocurre por mezcla y difusión dentro del cuerpo de agua.",
+      hint: "El río no espera: lleva lo que cae en él muy lejos.",
+    },
+    {
+      id: 15,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "¿Qué papel juega\nla POROSIDAD\ndel suelo?",
+      answer: "Suelos arenosos (alta porosidad) permiten transporte rápido hacia acuíferos. Suelos arcillosos (baja permeabilidad) actúan como filtro, retardando el movimiento.",
+      hint: "Arena vs. arcilla: ¿cuál deja pasar el agua más rápido?",
+    },
+    {
+      id: 16,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "¿Qué son los\ncontaminantes\nSECUNDARIOS?",
+      answer: "Contaminantes formados en la atmósfera cuando la radiación solar activa reacciones químicas con contaminantes primarios (NOx + COV = ozono troposférico / smog fotoquímico).",
+      hint: "No salen directamente de la fuente, se 'fabrican' en el aire.",
+    },
+    {
+      id: 17,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "¿Qué es la\nVOLATILIZACIÓN\ny para qué sirve?",
+      answer: "Proceso por el cual contaminantes del suelo o agua se convierten en gas y regresan a la atmósfera. Conecta el ciclo entre los medios ambientales.",
+      hint: "El movimiento inverso a la deposición.",
+    },
+    {
+      id: 18,
+      category: "proceso",
+      points: 200,
+      label: "PROCESO",
+      front: "Estudio de\nVALLEDUPAR:\n¿qué vehículo emite\nmás CO y PM10?",
+      answer: "Las motocicletas emiten la mayor cantidad de CO y PM10. Los automóviles particulares lideran en SOx, NOx, CO2 y N2O.",
+      hint: "Son los vehículos de dos ruedas más comunes en ciudades intermedias.",
+    },
+
+    // ── TRATAMIENTO (8 notas) ────────────────────────────
+    {
+      id: 19,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "3 etapas del\ntratamiento de\nAGUAS RESIDUALES",
+      answer: "1) Primario: procesos físicos (sedimentación, filtración). 2) Secundario: degradación biológica por microorganismos (30-60% materia orgánica). 3) Terciario: elimina nutrientes, metales pesados y patógenos específicos.",
+      hint: "Físico → Biológico → Avanzado.",
+    },
+    {
+      id: 20,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "¿Qué es la\nBIOFILTRACIÓN\ndel AIRE?",
+      answer: "Tecnología basada en microorganismos que degradan contaminantes del aire de forma natural. Especialmente útil para olores y ácido sulfhídrico. Es económica y ambientalmente sostenible.",
+      hint: "Alternativa ecológica a los tratamientos químicos para el aire.",
+    },
+    {
+      id: 21,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "¿Qué son los\nSCRUBBERS\no lavadores de gas?",
+      answer: "Sistemas tecnológicos que permiten eliminar partículas, aerosoles y compuestos solubles del aire. Contribuyen al cumplimiento de normativas ambientales.",
+      hint: "Como una 'ducha' para el aire contaminado de industrias.",
+    },
+    {
+      id: 22,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "Diferencia entre\nIN SITU\ny EX SITU",
+      answer: "In situ: tratamiento en el lugar de la contaminación sin excavar. Ex situ: se excava el suelo y se trata fuera del sitio. La elección depende del contaminante, concentración y características del suelo.",
+      hint: "¿Hay que mover la tierra o no?",
+    },
+    {
+      id: 23,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "¿Cómo funcionan\nlos TRATAMIENTOS\nTÉRMICOS del suelo?",
+      answer: "Aplican altas temperaturas para destruir o volatilizar contaminantes. Logran alta descontaminación en poco tiempo, pero son costosos y energéticamente intensivos.",
+      hint: "Efectivos pero caros. La rapidez tiene un precio.",
+    },
+    {
+      id: 24,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "¿Qué eliminan\nla COAGULACIÓN\ny FLOCULACIÓN?",
+      answer: "Agrupan partículas finas del agua para facilitar su eliminación. La coagulación neutraliza cargas eléctricas; la floculación une esas partículas en flóculos más grandes que sedimentan.",
+      hint: "De pequeñas partículas invisibles a grupos que caen al fondo.",
+    },
+    {
+      id: 25,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "¿Qué es la\nREDUCCIÓN\nCATALÍTICA (SCR)?",
+      answer: "Sistema de reducción catalítica selectiva (SCR): tecnología avanzada para tratamiento del aire que transforma contaminantes como NOx en compuestos menos dañinos mediante catalizadores.",
+      hint: "Se usa mucho en industrias con emisiones de óxidos de nitrógeno.",
+    },
+    {
+      id: 26,
+      category: "tratamiento",
+      points: 200,
+      label: "TRATAMIENTO",
+      front: "Diferencia entre\nTRATAMIENTO\ny CORRECCIÓN\nambiental",
+      answer: "El tratamiento reduce o neutraliza los contaminantes ya generados. La corrección busca restaurar las condiciones originales o aceptables del medio afectado. Son complementarios.",
+      hint: "Uno mitiga, el otro restaura.",
+    },
+
+    // ── CONCEPTOS (6 notas) ──────────────────────────────
+    {
+      id: 27,
+      category: "concepto",
+      points: 150,
+      label: "CONCEPTO",
+      front: "¿Qué es el\nMODELO\nHYSPLIT?",
+      answer: "Hybrid Single Particle Lagrangian Integrated Trajectory: modelo computacional que simula la trayectoria de partículas en la atmósfera. Se usó en Valledupar para predecir hacia dónde se mueven los contaminantes según la estación climática.",
+      hint: "Se usó para saber si los contaminantes van al norte o al sur.",
+    },
+    {
+      id: 28,
+      category: "concepto",
+      points: 150,
+      label: "CONCEPTO",
+      front: "¿Qué propone el\nMODELO DE CIUDAD\nCAMINABLE?",
+      answer: "Reducir el uso del automóvil, promover movilidad peatonal y en bicicleta, rehabilitar espacios públicos y áreas verdes. Demostró reducción de contaminación auditiva en el Centro Histórico de Ciudad de México.",
+      hint: "Menos carros, más pies y bicicletas, menos ruido.",
+    },
+    {
+      id: 29,
+      category: "concepto",
+      points: 150,
+      label: "CONCEPTO",
+      front: "¿Cuántas muertes\ncausó la contaminación\nen Colombia (2015)?",
+      answer: "10.527 muertes y 67,8 millones de síntomas/enfermedades. Los gastos económicos relacionados representaron el 1,593% del PIB en 2015.",
+      hint: "Datos del Departamento Nacional de Planeación de Colombia.",
+    },
+    {
+      id: 30,
+      category: "concepto",
+      points: 150,
+      label: "CONCEPTO",
+      front: "¿Hacia dónde van\nlos contaminantes en\nVALLEDUPAR según\nla temporada?",
+      answer: "Temporada lluviosa → Noreste. Temporada seca → Sureste. El patrón cambia porque los vientos varían entre estaciones.",
+      hint: "La lluvia y la sequía cambian la dirección del viento.",
+    },
+    {
+      id: 31,
+      category: "concepto",
+      points: 150,
+      label: "CONCEPTO",
+      front: "¿Qué % del parque\nvehicular creció en\nciudades intermedias\ncolombianas desde 2008?",
+      answer: "74% de crecimiento en el parque vehicular registrado de ciudades como Valledupar desde 2008. Esto las convierte en focos crecientes de contaminación urbana.",
+      hint: "Casi duplicó en menos de 20 años.",
+    },
+    {
+      id: 32,
+      category: "concepto",
+      points: 150,
+      label: "CONCEPTO",
+      front: "¿Qué es la\nCONTAMINACIÓN\nAUDITIVA?",
+      answer: "Todo sonido indeseable que afecta o perjudica a las personas. Causada por transporte, construcción, crecimiento poblacional. Provoca estrés y afecta la salud física y mental.",
+      hint: "El ruido también es contaminación, aunque no se vea.",
+    },
+
+    // ── ARTÍCULO (4 notas) ───────────────────────────────
+    {
+      id: 33,
+      category: "articulo",
+      points: 150,
+      label: "ARTÍCULO",
+      front: "¿Qué software\nusó el estudio de\nVALLEDUPAR para\nestimar emisiones?",
+      answer: "Software IVE (International Vehicle Emissions), que estima emisiones de contaminantes criterio y gases de efecto invernadero según el tipo de vehículo y combustible.",
+      hint: "Sus siglas en inglés significan 'Emisiones Internacionales de Vehículos'.",
+    },
+    {
+      id: 34,
+      category: "articulo",
+      points: 150,
+      label: "ARTÍCULO",
+      front: "¿Qué % de las\nemisiones en Bogotá\ny Medellín son\nde vehículos?",
+      answer: "Bogotá: 78% de emisiones contaminantes son vehiculares. Medellín: 81%. Las fuentes móviles dominan la contaminación urbana en Colombia.",
+      hint: "La mayor parte sale de los tubos de escape.",
+    },
+    {
+      id: 35,
+      category: "articulo",
+      points: 150,
+      label: "ARTÍCULO",
+      front: "Según la OMS:\n¿cuántas muertes\ncausa el aire\ncontaminado\nglobalmente?",
+      answer: "Una de cada 8 muertes a nivel mundial se debe a la contaminación del aire, según la Organización Mundial de la Salud.",
+      hint: "12.5% de todas las muertes en el mundo.",
+    },
+    {
+      id: 36,
+      category: "articulo",
+      points: 150,
+      label: "ARTÍCULO",
+      front: "¿Qué acciones propone\nel artículo sobre\nCONTAMINACIÓN\nAUDITIVA?",
+      answer: "Construir polígono peatonal/ciclista, elaborar mapa de ruido, colocar barreras naturales (árboles), integrar planeación urbana con cuidado ambiental.",
+      hint: "Soluciones urbanas para reducir el ruido en la ciudad.",
+    },
+
+    // ── RETO DOBLE (4 notas, valen el doble) ────────────
+    {
+      id: 37,
+      category: "reto",
+      points: 400,
+      label: "RETO x2",
+      front: "RETO DOBLE\nExplica el ciclo\nCOMPLETO de un\ncontaminante desde\nsu emisión hasta\nsu depósito final",
+      answer: "Emisión desde fuente → Transporte (advección horizontal) → Dispersión (turbulencia) → Posible transformación (fotoquímica) → Deposición (húmeda o seca) → Lixiviación al suelo → Adsorción o transporte a acuíferos.",
+      hint: "Recorre todos los medios: aire → suelo → agua.",
+    },
+    {
+      id: 38,
+      category: "reto",
+      points: 400,
+      label: "RETO x2",
+      front: "RETO DOBLE\nCompara biorremediación\nvs. fitorremediación:\nventajas y limitaciones\nde cada una",
+      answer: "Biorremediación: usa microorganismos, más rápida, optimizable con bioestimulación/bioaumentación, ideal para contaminantes orgánicos. Fitorremediación: usa plantas, más lenta, bajo costo, mínimo impacto, útil para metales pesados e hidrocarburos.",
+      hint: "Ambas son biológicas y sostenibles, pero con velocidades y usos distintos.",
+    },
+    {
+      id: 39,
+      category: "reto",
+      points: 400,
+      label: "RETO x2",
+      front: "RETO DOBLE\nMenciona 3 tecnologías\nde tratamiento del AIRE\ny explica brevemente\ncómo funciona cada una",
+      answer: "1) Oxidación catalítica: destruye contaminantes con catalizador. 2) Biofiltración: microorganismos degradan olores. 3) Scrubbers/lavadores: eliminan partículas y aerosoles con agua. Bonus: SCR reduce NOx.",
+      hint: "Piensa en distintos tipos: química, biológica y física.",
+    },
+    {
+      id: 40,
+      category: "reto",
+      points: 400,
+      label: "RETO x2",
+      front: "RETO DOBLE\n¿Por qué la\ncontaminación\nno se queda\ndonde se genera?\nExplica con ejemplos",
+      answer: "Porque el viento (advección), la lluvia (deposición húmeda) y los ríos transportan los contaminantes a zonas alejadas. Ej: contaminantes de Valledupar viajan 100s de km según el viento estacional; lluvia ácida afecta bosques lejos de las fábricas.",
+      hint: "La contaminación no conoce fronteras administrativas.",
+    },
+  ],
+};
+
+// ── Persiste cambios en localStorage ────────────────────────
+function loadWallData() {
+  const saved = localStorage.getItem("kwall_data");
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      // Merge: preserva notas reveladas entre sesiones
+      if (parsed.revealed) WALL_STATE.revealed = new Set(parsed.revealed);
+      if (parsed.scores)   WALL_STATE.scores   = parsed.scores;
+    } catch (e) {}
+  }
+}
+
+function saveWallState() {
+  localStorage.setItem("kwall_data", JSON.stringify({
+    revealed: [...WALL_STATE.revealed],
+    scores:   WALL_STATE.scores,
+  }));
+}
+
+// ── Estado global ────────────────────────────────────────────
+const WALL_STATE = {
+  revealed:     new Set(),   // IDs de notas ya reveladas
+  scores:       { A: 0, B: 0 },
+  activeTeam:   "A",
+  activeNote:   null,
+  editingNote:  null,
+};

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Wall — Gestión Ambiental</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     HEADER
+     ══════════════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="header__inner">
+    <div class="header__brand">
+      <span class="header__crest">🌿</span>
+    </div>
+    <div class="header__text">
+      <div class="header__overline">Universidad de Córdoba · Ingeniería Industrial · Gestión Ambiental</div>
+      <h1 class="header__title">Transporte y Dispersión de los Contaminantes</h1>
+      <div class="header__subtitle">Tratamiento y Corrección de la Contaminación — Knowledge Wall</div>
+    </div>
+    <div class="header__meta">
+      <div class="header__controls">
+        <span id="sheets-indicator" class="sheets-indicator sheets-offline">○ Sin conexión</span>
+        <button id="btn-mute" title="Silenciar / Activar sonido">🔊</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════
+     MARCADOR
+     ══════════════════════════════════════════════════════════ -->
+<section class="scoreboard">
+  <div class="scoreboard__inner">
+    <div class="team-score team-score--a">
+      <div class="team-score__name">Equipo A</div>
+      <div class="team-score__pts" id="score-a">0</div>
+      <div class="team-score__bar-wrap">
+        <div class="team-score__bar" id="score-bar-a"></div>
+      </div>
+    </div>
+
+    <div class="scoreboard__center">
+      <div class="vs-badge">VS</div>
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0 / 40 notas</div>
+      </div>
+    </div>
+
+    <div class="team-score team-score--b">
+      <div class="team-score__name">Equipo B</div>
+      <div class="team-score__pts" id="score-b">0</div>
+      <div class="team-score__bar-wrap">
+        <div class="team-score__bar" id="score-bar-b"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TOOLBAR
+     ══════════════════════════════════════════════════════════ -->
+<div class="toolbar">
+  <div class="toolbar__inner">
+    <div class="toolbar__left">
+      <span style="font-size:11px;color:#888;font-weight:700;letter-spacing:.05em">TURNO:</span>
+      <button class="team-toggle-btn active" data-team="A">Equipo A</button>
+      <button class="team-toggle-btn" data-team="B">Equipo B</button>
+    </div>
+    <div class="toolbar__right">
+      <button class="btn" id="btn-export-json">↓ JSON</button>
+      <button class="btn" id="btn-export-csv">↓ CSV / Excel</button>
+      <button class="btn" id="btn-import">↑ Importar</button>
+      <input type="file" id="import-file" accept=".json,.csv" style="display:none">
+      <button class="btn btn--danger" id="btn-reset">↺ Reiniciar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     LEYENDA
+     ══════════════════════════════════════════════════════════ -->
+<div class="legend">
+  <div class="legend__inner">
+    <span style="font-size:11px;color:#888;font-weight:700">CATEGORÍAS:</span>
+    <div class="legend__item">
+      <div class="legend__dot" style="background:#fef08a;border:1px solid #ca8a04"></div>
+      Glosario · 100 pts
+    </div>
+    <div class="legend__item">
+      <div class="legend__dot" style="background:#bbf7d0;border:1px solid #15803d"></div>
+      Procesos · 200 pts
+    </div>
+    <div class="legend__item">
+      <div class="legend__dot" style="background:#bfdbfe;border:1px solid #1d4ed8"></div>
+      Tratamiento · 200 pts
+    </div>
+    <div class="legend__item">
+      <div class="legend__dot" style="background:#fed7aa;border:1px solid #c2410c"></div>
+      Conceptos · 150 pts
+    </div>
+    <div class="legend__item">
+      <div class="legend__dot" style="background:#e9d5ff;border:1px solid #7e22ce"></div>
+      Artículo · 150 pts
+    </div>
+    <div class="legend__item">
+      <div class="legend__dot" style="background:#fecaca;border:1px solid #7b1c1c"></div>
+      Reto ×2 · 400 pts
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PANEL CONFIGURACIÓN SHEETS
+     ══════════════════════════════════════════════════════════ -->
+<div class="config-panel">
+  <div class="config-panel__inner">
+    <label for="sheets-url-input">Google Sheets URL:</label>
+    <input type="url" id="sheets-url-input"
+      placeholder="https://script.google.com/macros/s/.../exec  (opcional)">
+    <button class="btn" id="btn-save-sheets">Guardar</button>
+    <span style="font-size:10px;color:#aaa">
+      Déjalo vacío para modo offline. Los puntajes se guardan localmente.
+    </span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TABLERO DE NOTAS
+     ══════════════════════════════════════════════════════════ -->
+<main class="wall-container">
+  <div class="wall-grid" id="wall-grid">
+    <!-- Notas generadas por game.js -->
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL DE PREGUNTA
+     ══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__label" id="modal-label">GLOSARIO</span>
+      <span class="modal__pts" id="modal-pts">100 puntos</span>
+    </div>
+    <div class="modal__body">
+
+      <div class="modal__question" id="modal-question"></div>
+
+      <div class="modal__actions">
+        <button class="btn--reveal" id="btn-reveal-answer">Ver respuesta</button>
+        <button class="btn--hint" id="btn-show-hint" style="display:none">💡 Pista</button>
+        <button class="btn--skip" id="btn-skip">Saltar (sin puntos)</button>
+      </div>
+
+      <div id="modal-hint-section" style="display:none">
+        <div class="hint-box">
+          💡 <strong>Pista:</strong> <span id="modal-hint"></span>
+        </div>
+      </div>
+
+      <div id="answer-section" style="display:none">
+        <div class="answer-box" id="modal-answer"></div>
+        <div class="award-section" id="award-section" style="display:none">
+          <button class="btn--award btn--award-a" id="btn-award-a">
+            ✓ Punto para Equipo A
+          </button>
+          <button class="btn--award btn--award-b" id="btn-award-b">
+            ✓ Punto para Equipo B
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FIN DE JUEGO
+     ══════════════════════════════════════════════════════════ -->
+<div class="end-overlay" id="end-overlay">
+  <div class="end-card">
+    <div class="end-card__title">¡Tablero completo!</div>
+    <div class="end-scores">
+      <div class="end-score end-score--a">
+        <div class="end-score__team">Equipo A</div>
+        <div class="end-score__pts" id="end-score-a">0</div>
+      </div>
+      <div class="end-vs">—</div>
+      <div class="end-score end-score--b">
+        <div class="end-score__team">Equipo B</div>
+        <div class="end-score__pts" id="end-score-b">0</div>
+      </div>
+    </div>
+    <div class="end-winner" id="end-winner"></div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="btn--reveal" onclick="document.getElementById('end-overlay').style.display='none'">
+        Ver tablero final
+      </button>
+      <button class="btn btn--danger" onclick="resetGame()">Nuevo juego</button>
+      <button class="btn" onclick="exportCSV()">📥 Exportar resultados</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="sheets.js"></script>
+<script src="sound.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
