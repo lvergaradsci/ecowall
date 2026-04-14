@@ -8,141 +8,232 @@
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════════════════════
+     HEADER
+     ══════════════════════════════════════════════════════════ -->
 <header class="header">
   <div class="header__inner">
     <div class="header__brand">
-      <span class="header__crest">🌿</span>
+      <!-- Triple-clic aquí activa el panel de admin -->
+      <span class="header__crest" title="🌿">🌿</span>
     </div>
     <div class="header__text">
       <div class="header__overline">Universidad de Córdoba · Ingeniería Industrial · Gestión Ambiental</div>
       <h1 class="header__title">Transporte y Dispersión de los Contaminantes</h1>
       <div class="header__subtitle">Tratamiento y Corrección de la Contaminación — Knowledge Wall</div>
+      <div class="header__match-info" style="display:none;font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px"></div>
     </div>
     <div class="header__meta">
       <div class="header__controls">
         <span id="sheets-indicator" class="sheets-indicator sheets-offline">○ Sin conexión</span>
-        <button id="btn-mute">🔊</button>
+        <button id="btn-mute" title="Silenciar / Activar sonido">🔊</button>
       </div>
     </div>
   </div>
 </header>
 
+<!-- ══════════════════════════════════════════════════════════
+     MARCADOR (renderizado dinámicamente por JS)
+     ══════════════════════════════════════════════════════════ -->
 <section class="scoreboard">
-  <div class="scoreboard__inner">
-    <div class="team-score team-score--a">
-      <div class="team-score__name" id="team-name-a">Equipo 1</div>
-      <div class="team-score__pts" id="score-a">0</div>
-      <div class="team-score__bar-wrap">
-        <div class="team-score__bar" id="score-bar-a"></div>
-      </div>
-    </div>
-
-    <div class="scoreboard__center">
-      <div class="vs-badge">VS</div>
-      <div class="progress-wrap">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <div class="progress-label" id="progress-label">0 / 40 notas</div>
-      </div>
-    </div>
-
-    <div class="team-score team-score--b">
-      <div class="team-score__name" id="team-name-b">Equipo 2</div>
-      <div class="team-score__pts" id="score-b">0</div>
-      <div class="team-score__bar-wrap">
-        <div class="team-score__bar" id="score-bar-b"></div>
-      </div>
-    </div>
+  <div class="scoreboard__inner" id="scoreboard-inner">
+    <!-- JS lo llena con los grupos del match actual -->
   </div>
 </section>
 
+<!-- ══════════════════════════════════════════════════════════
+     TOOLBAR
+     ══════════════════════════════════════════════════════════ -->
 <div class="toolbar">
   <div class="toolbar__inner">
     <div class="toolbar__left">
-      <span style="font-size:11px;color:#888;font-weight:700;">TURNO:</span>
-      <button class="team-toggle-btn active" data-team="A">Equipo A</button>
-      <button class="team-toggle-btn" data-team="B">Equipo B</button>
+      <span style="font-size:11px;color:#888;font-weight:700;letter-spacing:.05em">TURNO:</span>
+      <div id="group-toggle-container" style="display:flex;gap:6px;flex-wrap:wrap">
+        <!-- Botones de grupos generados por JS -->
+      </div>
     </div>
     <div class="toolbar__right">
       <button class="btn" id="btn-export-json">↓ JSON</button>
       <button class="btn" id="btn-export-csv">↓ CSV</button>
+      <button class="btn" id="btn-import">↑ Importar</button>
+      <input type="file" id="import-file" accept=".json,.csv" style="display:none">
+      <button class="btn" id="btn-new-match">⚡ Nuevo match</button>
       <button class="btn btn--danger" id="btn-reset">↺ Reiniciar</button>
     </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════
+     LEYENDA (renderizada por JS con pesos actuales)
+     ══════════════════════════════════════════════════════════ -->
 <div class="legend">
-  <div class="legend__inner">
-    <span style="font-size:11px;color:#888;font-weight:700">CATEGORÍAS:</span>
-    <div class="legend__item">Glosario · 100 pts</div>
-    <div class="legend__item">Procesos · 200 pts</div>
-    <div class="legend__item">Tratamiento · 200 pts</div>
-    <div class="legend__item">Conceptos · 150 pts</div>
-    <div class="legend__item">Artículo · 150 pts</div>
-    <div class="legend__item">Reto ×2 · 400 pts</div>
+  <div class="legend__inner" id="legend-inner">
+    <!-- Generado por JS -->
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════
+     PANEL ADMIN OCULTO
+     Acceso: triple-clic en el 🌿 del header
+     Contiene: configuración de pesos + URL de Sheets + limpiar Sheets
+     ══════════════════════════════════════════════════════════ -->
+<div id="admin-panel" style="display:none">
+  <div class="admin-panel__inner">
+    <div class="admin-panel__title">🔧 Panel de Administración</div>
+
+    <div class="admin-section">
+      <div class="admin-section__title">⚖️ Pesos de Calificación</div>
+      <div class="admin-section__desc">
+        Multiplica los puntos base de cada categoría. Ejemplo: ×2 duplica los puntos.
+      </div>
+      <div id="weight-controls"></div>
+      <button class="btn btn--primary" id="btn-save-weights">Guardar pesos</button>
+    </div>
+
+    <div class="admin-section">
+      <div class="admin-section__title">☁️ Google Sheets</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input type="url" id="sheets-url-input"
+          placeholder="https://script.google.com/macros/s/.../exec"
+          style="flex:1;min-width:200px;padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px">
+        <button class="btn" id="btn-save-sheets">Guardar URL</button>
+      </div>
+    </div>
+
+    <div class="admin-section admin-section--danger">
+      <div class="admin-section__title">⚠️ Zona de peligro</div>
+      <p style="font-size:12px;color:#888;margin-bottom:8px">
+        Esta acción borra permanentemente todos los datos registrados en Google Sheets
+        (hojas Puntajes, Log e Historial). No se puede deshacer.
+      </p>
+      <button class="btn btn--danger" id="btn-clear-sheets">🗑 Vaciar Google Sheets</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TABLERO DE NOTAS
+     ══════════════════════════════════════════════════════════ -->
 <main class="wall-container">
-  <div class="wall-grid" id="wall-grid"></div>
+  <div class="wall-grid" id="wall-grid">
+    <!-- Notas generadas por game.js en orden barajado -->
+  </div>
 </main>
 
+<!-- ══════════════════════════════════════════════════════════
+     MODAL DE PREGUNTA
+     ══════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <div class="modal__header">
-      <span class="modal__label" id="modal-label"></span>
-      <span class="modal__pts" id="modal-pts"></span>
+      <span class="modal__label" id="modal-label">GLOSARIO</span>
+      <span class="modal__pts"  id="modal-pts">100 puntos</span>
     </div>
-
     <div class="modal__body">
 
-      <div class="modal__question" id="modal-question"></div>
+      <!-- La pregunta se muestra SOLO después de "Ver respuesta" -->
+      <div class="modal__question" id="modal-question">¿Pueden responder esta pregunta?</div>
 
       <div class="modal__actions">
-        <button class="btn--reveal" id="btn-reveal-answer">Ver respuesta</button>
-        <button class="btn--skip" id="btn-skip">Saltar</button>
+        <button class="btn--reveal" id="btn-reveal-answer">Ver pregunta y respuesta</button>
+        <button class="btn--hint"   id="btn-show-hint" style="display:none">💡 Pista</button>
+        <button class="btn--skip"   id="btn-skip">Saltar (sin puntos)</button>
+      </div>
+
+      <div id="modal-hint-section" style="display:none">
+        <div class="hint-box">
+          💡 <strong>Pista:</strong> <span id="modal-hint"></span>
+        </div>
       </div>
 
       <div id="answer-section" style="display:none">
         <div class="answer-box" id="modal-answer"></div>
-
-        <!-- 🔥 EQUIPOS DINÁMICOS -->
-        <div class="award-section" id="award-section" style="display:none">
-          <div style="font-size:12px;color:#888;margin-bottom:6px;">
-            Asignar puntos al equipo:
-          </div>
-          <div id="award-teams" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-        </div>
-
+        <!-- Los botones de asignación se generan dinámicamente por JS (BUG FIX) -->
+        <div class="award-section" id="award-section" style="display:none"></div>
       </div>
 
     </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════
+     OVERLAY SELECTOR DE MATCH (al inicio y al "Nuevo match")
+     ══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="match-setup-overlay" style="display:none">
+  <div class="modal modal--setup">
+    <div class="modal__header" style="background:#0a4f3a">
+      <span class="modal__label" style="background:rgba(255,255,255,0.2)">NUEVO MATCH</span>
+      <span class="modal__pts">🌿 Knowledge Wall</span>
+    </div>
+    <div class="modal__body">
+
+      <div class="setup-match-grid">
+        <div>
+          <label class="setup-label">Grupo A</label>
+          <select id="select-group-a" class="setup-select"></select>
+        </div>
+        <div class="setup-vs">VS</div>
+        <div>
+          <label class="setup-label">Grupo B</label>
+          <select id="select-group-b" class="setup-select"></select>
+        </div>
+      </div>
+
+      <button class="btn--reveal" id="btn-start-match" style="width:100%;margin-top:16px">
+        ▶ Iniciar match
+      </button>
+
+      <hr style="margin:20px 0;border:none;border-top:1px solid #eee">
+
+      <!-- Gestión de grupos -->
+      <div class="setup-section-title">👥 Grupos del salón</div>
+      <div id="groups-list" style="margin-bottom:10px"></div>
+
+      <div class="setup-add-group">
+        <input type="text"  id="input-group-name"  placeholder="Nombre del grupo" class="setup-input">
+        <input type="color" id="input-group-color" value="#2a7a4f" title="Color del grupo" class="setup-color">
+        <button class="btn btn--primary" id="btn-add-group">+ Agregar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FIN DE JUEGO
+     ══════════════════════════════════════════════════════════ -->
 <div class="end-overlay" id="end-overlay">
   <div class="end-card">
     <div class="end-card__title">¡Tablero completo!</div>
     <div class="end-scores">
-      <div class="end-score">
-        <div id="end-score-a">0</div>
+      <div class="end-score end-score--a">
+        <div class="end-score__team" id="end-team-a-name">Grupo A</div>
+        <div class="end-score__pts"  id="end-score-a">0</div>
       </div>
-      <div>—</div>
-      <div class="end-score">
-        <div id="end-score-b">0</div>
+      <div class="end-vs">—</div>
+      <div class="end-score end-score--b">
+        <div class="end-score__team" id="end-team-b-name">Grupo B</div>
+        <div class="end-score__pts"  id="end-score-b">0</div>
       </div>
     </div>
-    <div id="end-winner"></div>
-
-    <button onclick="resetGame()">Nuevo juego</button>
+    <div class="end-winner" id="end-winner"></div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="btn--reveal"
+        onclick="document.getElementById('end-overlay').style.display='none'">
+        Ver tablero final
+      </button>
+      <button class="btn btn--danger" onclick="resetMatch()">Nuevo match</button>
+      <button class="btn" onclick="exportCSV()">📥 Exportar resultados</button>
+    </div>
   </div>
 </div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
 <script src="sheets.js"></script>
 <script src="sound.js"></script>
 <script src="game.js"></script>
-
 </body>
 </html>
