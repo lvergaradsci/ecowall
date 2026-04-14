@@ -9,7 +9,7 @@
 // Si está definida, ignora cualquier URL guardada o ingresada.
 // =============================================================
 
-const HARDCODED_SHEETS_URL = ""; // ← pega tu URL aquí y descomenta
+const HARDCODED_SHEETS_URL = "https://script.google.com/macros/s/AKfycbz4eahszenqYQXKK4X2Jtiu4dPEhbNmmWzVB6Tv5oZxUT3UjBbAqQVT7Wu1DTfqWbGbIA/exec"; 
 
 const SheetsConnector = (() => {
 
