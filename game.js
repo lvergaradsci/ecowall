@@ -1,39 +1,40 @@
 // =============================================================
-// game.js v3 — Knowledge Wall · TODOS vs TODOS
+// game.js v2.1 — FIX: Todos vs Todos (sin romper lógica original)
 // =============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   loadWallState();
-  initGame();
-});
-
-// =============================================================
-// INICIALIZACIÓN
-// =============================================================
-function initGame() {
 
   if (!WALL_STATE.shuffledIds || WALL_STATE.shuffledIds.length === 0) {
     shuffleNotes();
   }
 
-  // Inicializar TODOS los grupos
+  initGame();
+});
+
+// =============================================================
+// INIT
+// =============================================================
+function initGame() {
+
+  // 🔥 FIX: inicializar TODOS los grupos
   WALL_STATE.scores = WALL_STATE.scores || {};
   WALL_DATA.groups.forEach(g => {
-    if (!WALL_STATE.scores[g.id]) WALL_STATE.scores[g.id] = 0;
+    if (!WALL_STATE.scores[g.id]) {
+      WALL_STATE.scores[g.id] = 0;
+    }
   });
 
   renderHeader();
   renderScoreboard();
   renderWall();
   renderLegend();
+
   setupToolbar();
   setupAdminPanel();
   checkSheetsConnection();
 
   document.addEventListener("click", () => WallSound.init(), { once: true });
-
-  document.getElementById("btn-reset").addEventListener("click", resetMatch);
-  document.getElementById("import-file").addEventListener("change", handleFileImport);
 }
 
 // =============================================================
@@ -48,9 +49,10 @@ function renderHeader() {
 }
 
 // =============================================================
-// TABLERO
+// WALL (SIN CAMBIOS IMPORTANTES)
 // =============================================================
 function renderWall() {
+
   const grid = document.getElementById("wall-grid");
   grid.innerHTML = "";
 
@@ -59,6 +61,7 @@ function renderWall() {
     .filter(Boolean);
 
   orderedNotes.forEach(note => {
+
     const isRevealed = WALL_STATE.revealed.has(note.id);
     const pts = calcPoints(note);
 
@@ -72,9 +75,20 @@ function renderWall() {
     const front = document.createElement("div");
     front.className = "note__front";
 
-    front.innerHTML = isRevealed
-      ? `<span>${note.front}</span>`
-      : `<span>???</span>`;
+    // 🔥 CLAVE: mantiene ??? (NO SE VE LA PREGUNTA)
+    if (!isRevealed) {
+      front.innerHTML = `
+        <span class="note__label">${note.label}</span>
+        <span class="note__text note__text--mystery">???</span>
+        <span class="note__pts">${pts} pts</span>
+      `;
+    } else {
+      front.innerHTML = `
+        <span class="note__label">${note.label}</span>
+        <span class="note__text">${note.front.replace(/\n/g, "<br>")}</span>
+        <span class="note__pts">${pts} pts</span>
+      `;
+    }
 
     const back = document.createElement("div");
     back.className = "note__back";
@@ -93,7 +107,7 @@ function renderWall() {
 }
 
 // =============================================================
-// MODAL
+// MODAL (🔥 AQUÍ ESTÁ EL CAMBIO CLAVE)
 // =============================================================
 function showModal(note) {
 
@@ -102,22 +116,32 @@ function showModal(note) {
 
   awardSection.innerHTML = "";
 
-  // 🔥 BOTONES PARA TODOS LOS GRUPOS
+  // 🔥 FIX: TODOS LOS GRUPOS (no solo A/B)
   WALL_DATA.groups.forEach(group => {
-    const btn = document.createElement("button");
-    btn.textContent = `✓ ${group.name}`;
-    btn.style.background = group.color;
 
-    btn.onclick = () => awardPoints(group.id, note);
+    const btn = document.createElement("button");
+    btn.className = "btn--award";
+
+    btn.style.borderColor = group.color;
+    btn.style.color = group.color;
+    btn.style.background = group.color + "18";
+
+    btn.textContent = `✓ Punto para ${group.name}`;
+
+    btn.addEventListener("click", () => awardPoints(group.id, note));
 
     awardSection.appendChild(btn);
   });
 
   document.getElementById("modal-answer").innerHTML = note.answer;
+  document.getElementById("modal-question").textContent = "¿Pueden responder esta pregunta?";
 
   overlay.style.display = "flex";
 }
 
+// =============================================================
+// CLICK NOTA
+// =============================================================
 function handleNoteClick(note) {
   if (WALL_STATE.revealed.has(note.id)) return;
   WALL_STATE.activeNote = note;
@@ -125,11 +149,15 @@ function handleNoteClick(note) {
 }
 
 // =============================================================
-// ASIGNAR PUNTOS
+// ASIGNAR PUNTOS (SIN CAMBIOS)
 // =============================================================
 function awardPoints(groupId, note) {
 
   const pts = calcPoints(note);
+
+  if (!WALL_STATE.scores[groupId]) {
+    WALL_STATE.scores[groupId] = 0;
+  }
 
   WALL_STATE.scores[groupId] += pts;
   WALL_STATE.revealed.add(note.id);
@@ -147,37 +175,41 @@ function awardPoints(groupId, note) {
 }
 
 // =============================================================
-// CERRAR MODAL
+// MODAL CLOSE
 // =============================================================
 function closeModal() {
   document.getElementById("modal-overlay").style.display = "none";
 }
 
 // =============================================================
-// MARCADOR DINÁMICO
+// SCOREBOARD (🔥 dinámico)
 // =============================================================
 function renderScoreboard() {
 
-  const container = document.getElementById("scoreboard-inner");
-  container.innerHTML = "";
+  const inner = document.getElementById("scoreboard-inner");
+  if (!inner) return;
+
+  inner.innerHTML = "";
 
   WALL_DATA.groups.forEach(group => {
 
     const score = WALL_STATE.scores[group.id] || 0;
 
     const div = document.createElement("div");
+    div.className = "team-score";
+
     div.innerHTML = `
-      <strong style="color:${group.color}">
-        ${group.name}
-      </strong>: ${score}
+      <div style="color:${group.color}">
+        ${group.name}: ${score}
+      </div>
     `;
 
-    container.appendChild(div);
+    inner.appendChild(div);
   });
 }
 
 // =============================================================
-// FINAL DEL JUEGO
+// END GAME
 // =============================================================
 function endGame() {
 
@@ -185,15 +217,15 @@ function endGame() {
   let max = -1;
 
   WALL_DATA.groups.forEach(g => {
-    const score = WALL_STATE.scores[g.id];
-    if (score > max) {
-      max = score;
+    const s = WALL_STATE.scores[g.id] || 0;
+    if (s > max) {
+      max = s;
       ganador = g;
     }
   });
 
   document.getElementById("end-winner").textContent =
-    `🏆 ${ganador.name} gana con ${max} puntos`;
+    ganador ? `🏆 ${ganador.name} gana con ${max} pts` : "Empate";
 
   document.getElementById("end-overlay").style.display = "flex";
 }
