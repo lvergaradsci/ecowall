@@ -136,11 +136,11 @@ function renderGroupList() {
   WALL_DATA.groups.forEach(g => {
     const row = document.createElement("div");
     row.className = "group-row";
-    row.innerHTML = 
+    row.innerHTML = `
       <span class="group-dot" style="background:${g.color}"></span>
       <span class="group-name">${g.name}</span>
       <button class="btn btn--sm btn--danger" onclick="removeGroup('${g.id}')">✕</button>
-    ;
+    `;
     list.appendChild(row);
   });
 }
@@ -158,7 +158,7 @@ function addGroupFromForm() {
   WALL_DATA.groups.push({ id, name, color, score: 0 });
   nameInput.value = "";
   renderGroupOptions();
-  showToast(✅ Grupo "${name}" agregado);
+  showToast(`✅ Grupo "${name}" agregado`);
 }
 
 function removeGroup(id) {
@@ -176,7 +176,7 @@ function renderHeader() {
   const gB = WALL_DATA.groups.find(g => g.id === WALL_STATE.matchGroupB);
   const sub = document.querySelector(".header__match-info");
   if (sub && gA && gB) {
-    sub.textContent = Match: ${gA.name}  vs  ${gB.name};
+    sub.textContent = `Match: ${gA.name}  vs  ${gB.name}`;
     sub.style.display = "block";
   }
 }
@@ -201,7 +201,7 @@ function renderWall() {
     cell.dataset.id = note.id;
 
     const noteEl = document.createElement("div");
-    noteEl.className = note note--${note.category}${isRevealed ? " note--revealed" : ""};
+    noteEl.className = `note note--${note.category}${isRevealed ? " note--revealed" : ""}`;
     noteEl.dataset.id = note.id;
     noteEl.style.setProperty("--rot", randomRot());
 
@@ -212,17 +212,17 @@ function renderWall() {
     front.className = "note__front";
     if (!isRevealed) {
       // Solo etiqueta de categoría y puntos ocultos → el jugador no sabe qué sale
-      front.innerHTML = 
+      front.innerHTML = `
         <span class="note__label">${note.label}</span>
         <span class="note__text note__text--mystery">???</span>
         <span class="note__pts">${pts} pts</span>
-      ;
+      `;
     } else {
-      front.innerHTML = 
+      front.innerHTML = `
         <span class="note__label">${note.label}</span>
         <span class="note__text">${note.front.replace(/\n/g, "<br>")}</span>
         <span class="note__pts">${pts} pts</span>
-      ;
+      `;
     }
 
     // Cara trasera
@@ -232,10 +232,10 @@ function renderWall() {
     // Buscar a qué grupo se le asignó
     const awardedTo = isRevealed ? getAwardedGroup(note.id) : null;
     const awardColor = awardedTo ? (WALL_DATA.groups.find(g => g.id === awardedTo)?.color || "#888") : "#888";
-    back.innerHTML = 
+    back.innerHTML = `
       <span class="note__pts-big" style="color:${awardColor}">+${pts}</span>
       <span class="note__pts-label">${awardedTo ? (WALL_DATA.groups.find(g => g.id === awardedTo)?.name || "pts") : "puntos"}</span>
-    ;
+    `;
 
     noteEl.appendChild(front);
     noteEl.appendChild(back);
@@ -261,7 +261,7 @@ const _awarded = {}; // { noteId: groupId }
 function getAwardedGroup(noteId) { return _awarded[noteId] || null; }
 
 function randomRot() {
-  return ${(Math.random() * 7 - 3.5).toFixed(2)}deg;
+  return `${(Math.random() * 7 - 3.5).toFixed(2)}deg`;
 }
 
 // =============================================================
@@ -296,7 +296,7 @@ function showModal(note) {
 
   document.getElementById("modal-label").textContent       = note.label;
   document.getElementById("modal-label").style.background  = catColors[note.category] || "#555";
-  document.getElementById("modal-pts").textContent         = ${pts} puntos;
+  document.getElementById("modal-pts").textContent         = `${pts} puntos`;
   // La pregunta NO se muestra aquí — la descubren al revelar la respuesta
   document.getElementById("modal-question").textContent    = "¿Pueden responder esta pregunta?";
   document.getElementById("modal-hint").textContent        = note.hint || "";
@@ -321,7 +321,7 @@ function showModal(note) {
     btn.style.borderColor = group.color;
     btn.style.color = group.color;
     btn.style.background = group.color + "18"; // muy transparente
-    btn.textContent = ✓ Punto para ${group.name};
+    btn.textContent = `✓ Punto para ${group.name}`;
     btn.addEventListener("click", () => awardPoints(group.id, note));
     awardSection.appendChild(btn);
   });
@@ -391,7 +391,7 @@ function revealNoteOnBoard(note, groupId) {
   WALL_STATE.revealed.add(note.id);
   saveWallState();
 
-  const noteEl = document.querySelector(.note[data-id="${note.id}"]);
+  const noteEl = document.querySelector(`.note[data-id="${note.id}"]`);
   if (!noteEl) return;
 
   noteEl.classList.add("note--flipping");
@@ -400,7 +400,7 @@ function revealNoteOnBoard(note, groupId) {
     noteEl.classList.remove("note--flipping");
     if (groupId) {
       const color = WALL_DATA.groups.find(g => g.id === groupId)?.color || "#888";
-      noteEl.querySelector(".note__back").style.borderTop = 4px solid ${color};
+      noteEl.querySelector(".note__back").style.borderTop = `4px solid ${color}`;
     }
   }, 700);
 }
@@ -434,7 +434,7 @@ function renderScoreboard() {
   const pctA = total > 0 ? (sA / total * 100).toFixed(0) : 0;
   const pctB = total > 0 ? (sB / total * 100).toFixed(0) : 0;
 
-  inner.innerHTML = 
+  inner.innerHTML = `
     <div class="team-score">
       <div class="team-score__name" style="color:${gA.color}">${gA.name}</div>
       <div class="team-score__pts" style="color:${gA.color}" id="score-a">${sA.toLocaleString()}</div>
@@ -458,7 +458,7 @@ function renderScoreboard() {
         <div class="team-score__bar" style="background:${gB.color};width:${pctB}%;margin-left:auto"></div>
       </div>
     </div>
-  ;
+  `;
 }
 
 // =============================================================
@@ -495,7 +495,7 @@ function renderGroupToggle() {
 function renderLegend() {
   const inner = document.getElementById("legend-inner");
   if (!inner) return;
-  inner.innerHTML = <span style="font-size:11px;color:#888;font-weight:700">CATEGORÍAS:</span>;
+  inner.innerHTML = `<span style="font-size:11px;color:#888;font-weight:700">CATEGORÍAS:</span>`;
 
   const catMeta = {
     glosario:    { bg: "#fef08a", border: "#ca8a04" },
@@ -514,11 +514,11 @@ function renderLegend() {
     const eff = Math.round(pts * w);
     const item = document.createElement("div");
     item.className = "legend__item";
-    item.innerHTML = 
+    item.innerHTML = `
       <div class="legend__dot" style="background:${m.bg};border:1px solid ${m.border}"></div>
       ${cat.charAt(0).toUpperCase() + cat.slice(1)} · ${eff} pts
-      ${w !== 1.0 ? <em style="color:#888;font-size:10px">(×${w})</em> : ""}
-    ;
+      ${w !== 1.0 ? `<em style="color:#888;font-size:10px">(×${w})</em>` : ""}
+    `;
     inner.appendChild(item);
   });
 }
@@ -539,7 +539,7 @@ function endGame() {
   document.getElementById("end-team-a-name").textContent = gA?.name || "Grupo A";
   document.getElementById("end-team-b-name").textContent = gB?.name || "Grupo B";
   document.getElementById("end-winner").textContent =
-    winner ? 🏆 ¡Gana ${winner.name}! : "🤝 ¡Empate perfecto!";
+    winner ? `🏆 ¡Gana ${winner.name}!` : "🤝 ¡Empate perfecto!";
 
   // Acumular puntaje total
   if (!WALL_STATE.totalScores) WALL_STATE.totalScores = {};
@@ -594,10 +594,10 @@ function exportJSON() {
 function exportCSV() {
   const header = ["id","category","basePoints","label","front","answer","hint"];
   const rows   = WALL_DATA.notes.map(n => [
-    n.id, n.category, n.basePoints, "${n.label}",
-    "${n.front.replace(/\n/g," ")}",
-    "${n.answer.replace(/"/g,'""')}",
-    "${(n.hint||"").replace(/"/g,'""')}"
+    n.id, n.category, n.basePoints, `"${n.label}"`,
+    `"${n.front.replace(/\n/g," ")}"`,
+    `"${n.answer.replace(/"/g,'""')}"`,
+    `"${(n.hint||"").replace(/"/g,'""')}"`
   ]);
   const csv  = [header, ...rows].map(r => r.join(",")).join("\n");
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
@@ -625,7 +625,7 @@ function handleFileImport(e) {
         WALL_DATA.notes = notes;
         shuffleNotes();
         renderWall();
-        showToast(✅ ${notes.length} preguntas importadas);
+        showToast(`✅ ${notes.length} preguntas importadas`);
       } else if (ext === "csv") {
         const lines = ev.target.result.split("\n").slice(1);
         WALL_DATA.notes = lines.filter(l => l.trim()).map(line => {
@@ -642,7 +642,7 @@ function handleFileImport(e) {
         });
         shuffleNotes();
         renderWall();
-        showToast(✅ ${WALL_DATA.notes.length} preguntas importadas);
+        showToast(`✅ ${WALL_DATA.notes.length} preguntas importadas`);
       }
     } catch(err) {
       showToast("❌ Error al importar: " + err.message, "error");
@@ -731,7 +731,7 @@ function renderWeightControls() {
     const w    = WALL_DATA.weights[cat] ?? 1.0;
     const row  = document.createElement("div");
     row.className = "weight-row";
-    row.innerHTML = 
+    row.innerHTML = `
       <label class="weight-label">${cat.charAt(0).toUpperCase() + cat.slice(1)}
         <span style="color:#888;font-size:10px">(base: ${baseMap[cat]} pts)</span>
       </label>
@@ -741,11 +741,11 @@ function renderWeightControls() {
       <span class="weight-preview" style="color:#888;font-size:11px">
         → ${Math.round(baseMap[cat] * w)} pts
       </span>
-    ;
+    `;
     // Preview en tiempo real
     row.querySelector(".weight-input").addEventListener("input", function() {
       const v = parseFloat(this.value) || 1;
-      row.querySelector(".weight-preview").textContent = → ${Math.round(baseMap[cat] * v)} pts;
+      row.querySelector(".weight-preview").textContent = `→ ${Math.round(baseMap[cat] * v)} pts`;
     });
     container.appendChild(row);
   });
@@ -782,7 +782,7 @@ async function checkSheetsConnection() {
 function showToast(msg, type = "info") {
   const t = document.getElementById("toast");
   t.textContent = msg;
-  t.className   = toast toast--${type} toast--show;
+  t.className   = `toast toast--${type} toast--show`;
   clearTimeout(t._timer);
   t._timer = setTimeout(() => t.classList.remove("toast--show"), 3000);
 }
